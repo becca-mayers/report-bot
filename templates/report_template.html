@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Report</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css"> 
+    <link rel="stylesheet" type="text/css" href="{{ css_file }}">
+    <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
+    <style type="text/css"> 
+    .material-icons.md-18 { font-size: 18px; }
+    .material-icons.md-24 { font-size: 24px; }
+    .material-icons.md-36 { font-size: 36px; }
+    .material-icons.md-48 { font-size: 48px; }
+    
+    .material-icons.success { color: #4caf50 }
+    .material-icons.info { color: #00bcd4 }
+    .material-icons.warning { color: #ff9800 }
+    .material-icons.primary { color: #ab47bc }
+    .material-icons.danger { color: #f44336 }
+    .material-icons.secondary { color: #6c757d }
+    .material-icons.white { color: #ffffff }
+    </style>
+  </head>
+<body>
+<!-- Header -->
+<table width="100%" border="0" cellspacing="0" cellpadding="0" bg-color="#eeeeee">
+		<tr>
+    		<td style="color:#777777; font-family:Arial, sans-serif; font-size:26px; line-height:28px; text-align:left; padding-left:15px; padding-top:15px;">Management of Care Report</td>
+            <td style="color:#777777; font-family:Arial, sans-serif; font-size:24px; line-height:26px; text-align:right; padding-right:15px; padding-top:15px;"> FYTD {{ current_readable }}</td>
+            </tr>
+        <tr>
+            <td style="color:#777777; font-family:Arial, sans-serif; font-size:11px; line-height:11px; text-align:left; padding-left:15px; padding-top:15px;"><i> Values reflect {{ current_readable }} performance, unless otherwise indicated.</i></td>
+            </tr>
+        <tr>
+            <td style="color:#777777; font-family:Arial, sans-serif; font-size:11px; line-height:11px; text-align:left; padding-left:15px; padding-top:15px;">&nbsp;</td>
+            </tr>
+     </table>
+    
+<!-- Data Points -->
+<div class="container-fluid">
+   <div class="row">
+   {% for i in range(4) %}
+        <div class="col-lg-6 col-md-6 col-sm-6"> <!-- "col-lg-6 col-md-6 col-sm-6" -->
+          <div class="card card-stats">
+            <div class={{ data_points[i].class }}>
+              <div class="card-icon">
+                {{ data_points[i].icon }}
+               </div>
+                  <h3 class={{ data_points[i].icon_text }}>{{ data_points[i].value }}</h3>
+                  <h4 class="text-secondary">{{ data_points[i].metric }}</h4>
+                  <h4 class="text-secondary">{{ current_readable }}</h4>
+                   </div>
+                <div class="card-footer">
+                  <div class="stats"></div>
+                </div>
+             </div>
+          </div>
+        {% endfor %}
+      </div>
+<!-- LOS -->
+<p>&nbsp;</p>
+  <div class="container-fluid">
+      <div class="card card-nav-tabs">
+          <div class={{ data_points[0].header_class }}>
+            <h2>{{ data[0].metric|title }} {{ data[0].summary_icon }}</h2>
+            <h3>{{ data[0].summary }}</h3>
+          </div> 
+      <br>
+    <!-- Top/Bottom Performers -->
+    <div class="row">
+       <div class="col-md-6">
+        <div class="card">
+            <div class="card-header card-header-success">
+                <h2 class="card-title">Top Performers</h2>
+              </div>
+            <div class="card-body">
+                <table>
+                    {% for i in range(4) %} 
+                        <tr>
+                            <td>
+                                <tr>
+                                    <td>{{ performers[0][i].top.numeric_icon }}</td>
+                                    <td>&nbsp;&nbsp;&nbsp;</td>
+                                    <td><h3 class="card-category"> <b>{{ performers[0][i].top.facility }}</b> had a {{ data[0].metric }} of <span class={{ performers[0][i].top.class }}> <b>{{ performers[0][i].top.value }}</b></span> {{ current_readable }}, which is a {{ performers[0][i].top.icon }} <b>{{ performers[0][i].top.percentage_change }}</b> {{ performers[0][i].top.percentage_change_direction }} from {{ last_readable }} (<b>{{ performers[0][i].top.from_value }}</b>).</h3></td>
+                                </tr> 
+                            </td>
+                        </tr>
+                     {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+      <div class="col-md-6">
+          <div class="card">
+             <div class="card-header card-header-warning">
+                <h2 class="card-title">Bottom Performers</h2>
+             </div>
+                <div class="card-body">
+                    <table>
+                        <tr>
+                            {% for i in range(4) %} 
+                              <td>
+                                 <tr>
+                                    <td>{{ performers[0][i].bottom.numeric_icon }}</td>
+                                    <td>&nbsp;&nbsp;&nbsp;</td>
+                                    <td><h3 class="card-category"> <b>{{ performers[0][i].bottom.facility }}</b> had a {{ data[0].metric }} of <span class={{ performers[0][i].bottom.class }}> <b>{{ performers[0][i].bottom.value }}</b></span> {{ current_readable }}, which is a {{ performers[0][i].bottom.icon }} <b>{{ performers[0][i].bottom.percentage_change }}</b> {{ performers[0][i].bottom.percentage_change_direction }} from {{ last_readable }} (<b>{{ performers[0][i].bottom.from_value }}</b>).</h3></td>
+                                </tr>
+                            </td>
+                        </tr> 
+                    {% endfor %}
+                 </table>
+             </div>
+         </div>
+     </div>
+  <div class="col-md-6">
+      <div class="card-header card-header-success">
+           <h2 class="card-title">Best Progress</h2>
+      </div>
+          <div class="card-body">
+      <table>
+          {% for i in range(4) %} 
+              <tr>
+                  <td>
+                      <tr>
+                          <td>{{ data[0][i].top.numeric_icon }}</td>
+                          <td>&nbsp;&nbsp;&nbsp;</td>
+                          <td><h3 class="card-category"><b>{{ data[0][i].top.facility }}</b> had a {{ data[0].metric }} of <b>{{ data[0][i].top.to }}</b>, which {{ data[0][i].top.trend_type }} the FYTD by {{ data[0][i].top.main_icon }} <span class={{ data[0][i].top.class }}> <b>{{ data[0][i].top.percentage_change }}</b></span> (<b>{{ data[0][i].top.from }}</b> to <b>{{ data[0][i].top.to }}</b>).</h3></td>
+                      </tr>
+                 </td>
+           </tr>
+         {% endfor %}
+      </table>
+   </div>
+</div>
+    <div class="col-md-6" >
+        <div class="card-header card-header-warning">
+            <h2 class="card-title">Worst Progress</h2>
+         </div>
+            <div class="card-body">
+                <table bgcolor="#eeeeee">
+                  {% for b in range(4) %} 
+                    <tr>
+                        <td>
+                            <tr>
+                                <td>{{ data[0][b].bottom.numeric_icon }}</td>
+                                <td>&nbsp;&nbsp;&nbsp;</td>
+                                <td><h3 class="card-category"><b>{{ data[0][b].bottom.facility }}</b> had a {{ data[0].metric }} of <b>{{ data[0][b].bottom.to }}</b>, which {{ data[0][b].bottom.trend_type }} the FYTD by {{ data[0][b].bottom.main_icon }}  <span class={{ data[0][b].bottom.class }}> <b>{{ data[0][b].bottom.percentage_change }}</b></span> (<b>{{ data[0][b].bottom.from }}</b> to <b>{{ data[0][b].bottom.to }}</b>).</h3></td>
+                            </tr>
+                        </td>
+                    </tr>
+                {% endfor %}
+              </table>
+           </div>
+         </div>
+     </div>
+        <h3 class="card-category" align="center"><i>Tier <b>B</b> average is <b>{{ data_points[0].B }}. Tier <b>C</b> average is <b>{{ data_points[0].C }}.</i></h3>
+     </div>
+        <p>&nbsp;</p>
+     </div>
+    <!-- Opp Days -->
+        <p>&nbsp;</p>
+          <div class="container-fluid">
+            <div class="content">
+              <div class="card card-nav-tabs">
+                  <div class={{ data_points[1].header_class }}>
+                    <h2>{{ data[1].metric|title }} {{ data[1].summary_icon }}</h2>
+                    <h3 class="category">{{ data[1].summary }}</h3>
+                  </div> 
+                      <br>
+                        <!-- Top/Bottom Performers -->
+                        <div class="row">
+                           <div class="col-md-6">
+                            <div class="card">
+                                  <div class="card-header card-header-success">
+                                     <h2 class="card-title">Top Performers</h2>
+                                  </div>
+                                    <div class="card-body">
+                                        <table>
+                                            {% for i in range(4) %} 
+                                                 <tr>
+                                                     <td>{{ performers[1][i].top.numeric_icon }}</td>
+                                                     <td>&nbsp;&nbsp;&nbsp;</td>
+                                                     <td><h3 class="card-category"><b>{{ performers[1][i].top.facility }}</b> had <span class={{ performers[1][i].top.class }}> <b>{{ performers[1][i].top.to_value }}</b></span> {{ data[1].metric }} {{ current_readable }}, which is a {{ performers[1][i].top.icon }} <b>{{ performers[1][i].top.percentage_change }}</b> {{ performers[1][i].top.percentage_change_direction }} from {{ last_readable }} (<b>{{ performers[1][i].top.from_value }}</b>).</h3></td>
+                                                </tr> 
+                                             {% endfor %}
+                                         </table>
+                                    </div>
+                                </div>
+                            </div>
+                              <div class="col-md-6">
+                                  <div class="card">
+                                     <div class="card-header card-header-warning">
+                                        <h2 class="card-title">Bottom Performers</h2>
+                                     </div>
+                                    <div class="card-body">
+                                        <table>
+                                            {% for i in range(4) %} 
+                                                <tr>
+                                                    <td>{{ performers[1][i].bottom.numeric_icon }}</td>
+                                                    <td>&nbsp;&nbsp;&nbsp;</td>
+                                                    <td><h3 class="card-category"><b>{{ performers[1][i].bottom.facility }}</b> had <span class={{ performers[1][i].bottom.class }}> <b>{{ performers[1][i].bottom.to_value }}</b></span> {{ data[1].metric }} {{ current_readable }}, which is a {{ performers[1][i].bottom.icon }} <b>{{ performers[1][i].bottom.percentage_change }}</b> {{ performers[1][i].bottom.percentage_change_direction }} from {{ last_readable }} (<b>{{ performers[1][i].bottom.from_value }}</b>).</h3></td>
+                                                </tr> 
+                                            {% endfor %}
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                              <div class="col-md-6">
+                                <div class="card-header card-header-success">
+                                    <h2 class="card-title">Best Progress</h2>
+                                        </div>
+                                    <div class="card-body">
+                                      <table>
+                                          {% for i in range(4) %} 
+                                             <tr><td>{{ data[1][i].top.numeric_icon }}</td>
+                                              <td>&nbsp;&nbsp;&nbsp;</td>
+                                              <td><h3 class="card-category"><b>{{ data[1][i].top.facility }}</b> had <b>{{ data[1][i].top.to }}</b> {{ data[1].metric }}, which {{ data[1][i].top.trend_type }}d the FYTD by {{ data[1][i].top.main_icon }} <span class={{ data[1][i].top.class }}> <b>{{ data[1][i].top.percentage_change }}</b></span> {{ current_readable }} versus {{ last_readable }} (<b>{{ data[1][i].top.from }}</b> to <b>{{ data[1][i].top.to }}</b>).</h3></td>
+                                            </tr>
+                                          {% endfor %}
+                                      </table>
+                                   </div>
+                                </div>
+                                    <div class="col-md-6" >
+                                         <div class="card-header card-header-warning">
+                                            <h2 class="card-title">Worst Progress</h2>
+                                         </div>
+                                            <div class="card-body">
+                                                <table bgcolor="#eeeeee">
+                                                   {% for b in range(4) %} 
+                                                      <tr>
+                                                      <td>{{ data[1][b].bottom.numeric_icon }}</td>
+                                                      <td>&nbsp;&nbsp;&nbsp;</td>
+                                                      <td padding-left="15px"><h3 class="card-category"><b>{{ data[1][b].bottom.facility }}</b> had <b>{{ data[1][b].bottom.to }}</b> {{ data[1].metric }}, which {{ data[1][b].bottom.trend_type }}d the FYTD by {{ data[1][b].bottom.main_icon }} <span class={{ data[1][b].bottom.class }}><b>{{ data[1][b].bottom.percentage_change }}</b></span> (<b>{{ data[1][b].bottom.from }}</b> to <b>{{ data[1][b].bottom.to }}</b>).</h3></td>
+                                                 </tr>
+                                              {% endfor %}
+                                           </table>
+                                       </div>
+                                   </div>
+                                </div>
+                                     <h3 class="card-category" align="center"><i>Tier <b>B</b> average is <b>{{ data_points[1].B }}. Tier <b>C</b> average is <b>{{ data_points[1].C }}.</h3>
+                                 </div>
+                                     <p>&nbsp;</p>
+                                </div>
+                                <!-- Obs Rates -->
+                                 <p>&nbsp;</p>
+                                     <div class="container-fluid">
+                                          <div class="card card-nav-tabs">
+                                              <div class={{ data_points[2].header_class }}>
+                                                  <h2>{{ data[2].metric|title }} {{ data[2].summary_icon }}</h2>
+                                                  <h3 class="category">{{ data[2].summary }}</h3>
+                                             </div> 
+                                         <br>
+                                <!-- Top/Bottom Performers -->
+                                <div class="row">
+                                   <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-header card-header-success">
+                                            <h2 class="card-title">Top Performers</h2>
+                                          </div>
+                                        <div class="card-body">
+                                            <table>
+                                                {% for i in range(4) %} 
+                                                    <tr>
+                                                        <td>{{ performers[2][i].top.numeric_icon }}</td>
+                                                        <td>&nbsp;&nbsp;&nbsp;</td>
+                                                        <td><h3 class="card-category"> <b>{{ performers[2][i].top.facility }}</b> had <span class={{ performers[2][i].top.class }}> <b>{{ performers[2][i].top.value }}</b></span> {{ data[2].metric }} {{ current_readable }}, which is a {{ performers[2][i].top.icon }} <b>{{ performers[2][i].top.percentage_change }}</b> {{ performers[2][i].top.percentage_change_direction }} from {{ last_readable }} (<b>{{ performers[2][i].top.from_value }}</b>).</h3></td>
+                                                    </tr> 
+                                                 {% endfor %}
+                                            </table>
+                                          </div>
+                                       </div>
+                                     </div>
+                                      <div class="col-md-6">
+                                          <div class="card">
+                                             <div class="card-header card-header-warning">
+                                                <h2 class="card-title">Bottom Performers</h2>
+                                             </div>
+                                            <div class="card-body">
+                                                <table>
+                                                    {% for i in range(4) %} 
+                                                     <tr>
+                                                         <td>{{ performers[2][i].bottom.numeric_icon }}</td>
+                                                         <td>&nbsp;&nbsp;&nbsp;</td>
+                                                         <td><h3 class="card-category"> <b>{{ performers[2][i].bottom.facility }}</b> had <span class={{ performers[2][i].bottom.class }}> <b>{{ performers[2][i].bottom.value }}</b></span> {{ data[2].metric }} {{ current_readable }}, which is a {{ performers[2][i].bottom.icon }} <b>{{ performers[2][i].bottom.percentage_change }}</b> {{ performers[2][i].bottom.percentage_change_direction }} from {{ last_readable }} (<b>{{ performers[2][i].bottom.from_value }}</b>).</h3></td>
+                                                    </tr> 
+                                                    {% endfor %}
+                                                </table>
+                                             </div>
+                                        </div>
+                                 </div>
+                                   <div class="col-md-6">
+                                     <div class="card-header card-header-success">
+                                        <h2 class="card-title">Best Progress</h2>
+                                     </div>
+                                   <div class="card-body">
+                                      <table>
+                                        {% for i in range(4) %} 
+                                           <tr>
+                                             <td>{{ data[2][i].top.numeric_icon }}</td>
+                                             <td>&nbsp;&nbsp;&nbsp;</td>
+                                             <td><h3 class="card-category"><b>{{ data[2][i].top.facility }}</b> had a {{ data[2][i].top.icon }} <span class={{ data[2][i].top.class }}> <b>{{ data[2][i].top.percentage_change }}</b></span> {{ data[2][i].top.trend_type }} in {{ data[2].metric }} (<b>{{ data[2][i].top.from }}</b> in {{ last_readable }} to <b>{{ data[2][i].top.to }}</b> in {{ current_readable }}).</h3></td>
+                                          </tr>
+                                        {% endfor %}
+                                     </table>
+                                  </div>
+                                </div>
+                            <div class="col-md-6" >
+                               <div class="card-header card-header-warning">
+                                    <h2 class="card-title">Worst Progress</h2>
+                                 </div>
+                                    <div class="card-body">
+                                       <table bgcolor="#eeeeee">
+                                          {% for b in range(4) %} 
+                                             <tr>
+                                                <td>{{ data[2][b].bottom.numeric_icon }}</td>
+                                                <td>&nbsp;&nbsp;&nbsp;</td>
+                                                <td padding-left="15px"><h3 class="card-category"><b>{{ data[2][b].bottom.facility }}</b> had a {{ data[2][b].bottom.icon }} <span class={{ data[2][b].bottom.class }}> <b>{{ data[2][b].bottom.percentage_change }}</b> </span> {{ data[2][b].bottom.trend_type }} in {{ data[2].metric }} (<b>{{ data[2][b].bottom.from }}</b> in {{ last_readable }} to <b>{{ data[2][b].bottom.to }}</b> in {{ current_readable }}).</h3></td>
+                                             </tr>
+                                           {% endfor %}
+                                         </table>
+                                       </div>
+                                     </div>
+                                  </div>
+                                     <h3 class="card-category" align="center"><i>Tier <b>B</b> average is <b>{{ data_points[2].B }}. Tier <b>C</b> average is <b>{{ data_points[2].C }}.</h3>
+                             </div> 
+                             <!-- Cases > 48 -->
+                             <p>&nbsp;</p>
+                                 <div class="container-fluid">
+                                     <div class="content">
+                                          <div class="card card-nav-tabs">
+                                              <div class={{ data_points[3].header_class }}>
+                                                <h2>{{ data[3].metric|title }} {{ data[3].summary_icon }}</h2>
+                                                <h3 class="category">{{ data[3].summary }}</h3>
+                                             </div> 
+                                                 <br>
+                                                    <!-- Top/Bottom Performers -->
+                                                    <div class="row">
+                                                       <div class="col-md-6">
+                                                        <div class="card">
+                                                              <div class="card-header card-header-success">
+                                                                 <h2 class="card-title">Top Performers</h2>
+                                                              </div>
+                                                            <div class="card-body">
+                                                                <table>
+                                                            {% for i in range(4) %} 
+                                                                <tr><td>{{ performers[3][i].top.numeric_icon }}</td>
+                                                                <td>&nbsp;&nbsp;&nbsp;</td>
+                                                                <td><h3 class="card-category"> <b>{{ performers[3][i].top.facility }}</b> had <span class={{ performers[3][i].top.class }}> <b>{{ performers[3][i].top.to_value }}</b></span> {{ data[3].metric }} {{ current_readable }}, which is a {{ performers[3][i].top.icon }} <b>{{ performers[3][i].top.percentage_change }}</b> {{ performers[3][i].top.percentage_change_direction }} from {{ last_readable }} (<b>{{ performers[3][i].top.from_value }}</b>).</h3></td>
+                                                             {% endfor %}
+                                                        </table>
+                                                     </div>
+                                                 </div>
+                                             </div>
+                                                  <div class="col-md-6">
+                                                      <div class="card">
+                                                         <div class="card-header card-header-warning">
+                                                            <h2 class="card-title">Bottom Performers</h2>
+                                                         </div>
+                                                        <div class="card-body">
+                                                            <table>
+                                                               {% for i in range(4) %} 
+                                                               <tr><td>{{ performers[3][i].bottom.numeric_icon }} </td>
+                                                               <td>&nbsp;&nbsp;&nbsp;</td>
+                                                                   <td><h3 class="card-category"> <b>{{ performers[3][i].bottom.facility }}</b> had <span class={{ performers[3][i].bottom.class }}> <b>{{ performers[3][i].bottom.to_value }}</b></span> {{ data[3].metric }} {{ current_readable }}, which is a {{ performers[3][i].bottom.icon }} <b>{{ performers[3][i].bottom.percentage_change }}</b> {{ performers[3][i].bottom.percentage_change_direction }} from {{ last_readable }} (<b>{{ performers[3][i].bottom.from_value }}</b>).</h3></td>
+                                                               </tr> 
+                                                               {% endfor %}
+                                                           </table>
+                                                        </div>
+                                                     </div>
+                                                 </div>
+                                                   <div class="col-md-6">
+                                                     <div class="card-header card-header-success">
+                                                        <h2 class="card-title">Best Progress</h2>
+                                                     </div>
+                                                       <div class="card-body">
+                                                          <table>
+                                                           {% for i in range(4) %} 
+                                                               <tr><td>{{ data[3][i].top.numeric_icon }}</td>
+                                                               <td>&nbsp;&nbsp;&nbsp;</td>
+                                                               <td><h3 class="card-category"><b>{{ data[3][i].top.facility }}</b> had {{ data[3][i].top.to }} {{ data[3].metric }}, which {{ data[3][i].top.trend_type }} FYTD by {{ data[3][i].top.icon }} <span class={{ data[3][i].top.class }}> <b>{{ data[3][i].top.percentage_change }}</b> </span> (<span class={{ data[3][i].top.class }}><b>{{ data[3][i].top.from }}</b></span> to <span class={{ data[3][i].top.class }}><b>{{ data[3][i].top.to }}</b></span>).</h3></td>
+                                                             </tr>
+                                                           {% endfor %}
+                                                       </table>
+                                                   </div>
+                                                </div>
+                                                    <div class="col-md-6">
+                                                        <div class="card-header card-header-warning">
+                                                            <h2 class="card-title">Worst Progress</h2>
+                                                         </div>
+                                                            <div class="card-body">
+                                                                <table bgcolor="#eeeeee">
+                                                                  {% for b in range(4) %} 
+                                                                    <tr><td>{{ data[3][b].bottom.numeric_icon }} </td>
+                                                                    <td>&nbsp;&nbsp;&nbsp;</td>
+                                                                     <td padding-left="15px"><h3 class="card-category"><b>{{ data[3][b].bottom.facility }}</b> had {{ data[3][b].bottom.to }} {{ data[3].metric }}, which {{ data[3][b].bottom.trend_type }} FYTD by {{ data[3][b].bottom.icon }} <span class={{ data[3][b].bottom.class }}> <b>{{ data[3][b].bottom.percentage_change }}</b> </span> (<span class={{ data[3][b].bottom.class }}><b>{{ data[3][b].bottom.from }}</b></span> to <span class={{ data[3][b].bottom.class }}><b>{{ data[3][b].bottom.to }}</b></span>).</h3></td>
+                                                                  </tr>
+                                                                  {% endfor %}
+                                                                </table>
+                                                             </div>
+                                                           </div>
+                                                       </div>
+                                                        <h3 class="card-category" align="center"><i>Tier <b>B</b> average is <b>{{ data_points[3].B }}. Tier <b>C</b> average is <b>{{ data_points[3].C }}.</h3>
+                                                    </div>
+                                                      <p>&nbsp;</p>
+                                                   </div>
+                                            <!-- Recommendations -->
+                                             <p>&nbsp;</p>
+                                                  <div class="container-fluid">
+                                                      <div class="content">
+                                                            <div class="card card-nav-tabs">
+                                                              <div class="card-header card-header-info">
+                                                                <h2 class="card-title">Recommendations</h2>
+                                                               </div>
+                                                              <div class="card-body">
+                                                            <div class="row">
+                                                          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                                                          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                                                               <div class="info info-horizontal">
+                                                                	<div class="icon icon-rose">
+                                                                    	<h3 class="info-title"><i class={{ recommendations[0].class }}>{{ recommendations[0].icon }}</i>{{ recommendations[0].area|title }}</h3>
+                                                                            <div class="description">
+                                                                            	<h4>{{ recommendations[0].action }} {{ recommendations[0].area }} by {{ recommendations[0].percentage }}%.</h4>
+                                                                            </div>
+                                                                         </div>
+                                                                    </div>
+                                                                        <br>
+                                                                            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                                                                            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                                                                            <p>&nbsp;</p>
+                                                                                <div class="info info-horizontal">
+                                                                                	<div class="icon icon-rose">
+                                                                                    	<h3 class="info-title"><i class={{ recommendations[1].class }}>{{ recommendations[1].icon }}</i>{{ recommendations[1].area|title }}</h3>
+                                                                                        <div class="description">
+                                                                                        	<h4>{{ recommendations[1].action }} {{ recommendations[1].area }} by {{ recommendations[1].percentage }}%.</h4>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div> 
+                                                                                    <br>
+                                                                                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                                                                                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                                                                                             <div class="info info-horizontal">
+                                                                                                	<div class="icon icon-rose">
+                                                                                                		 <h3 class="info-title"><i class={{ recommendations[2].class }}>{{ recommendations[2].icon }}</i>{{ recommendations[2].area|title }}</h3>
+                                                                                                        <div class="description">
+                                                                                                        	<h4>{{ recommendations[2].action }} {{ recommendations[2].area }} by {{ recommendations[2].percentage }}%.</h4>
+                                                                                                        </div>
+                                                                                                   </div>
+                                                                                               </div> 
+                                                                                           <br>
+                                                                                                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                                                                                                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                                                                                                <p>&nbsp;</p>
+                                                                                                 <div class="info info-horizontal">
+                                                                                                    	<div class="icon icon-rose">
+                                                                                                    		 <h3 class="info-title"><i class={{ recommendations[3].class }}>{{ recommendations[3].icon }}</i>{{ recommendations[3].area|title }}</h3>
+                                                                                                            <div class="description">
+                                                                                                            	<h4>{{ recommendations[3].action }} {{ recommendations[3].area }} by {{ recommendations[3].percentage }}%.</h4>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                     </div>
+                                                                                                  </div>
+                                                                                               </div>
+                                                                                            </div>
+                                                                                         </div>
+                                                                                     </div> 
+ <!-- footer -->
+ <table align="center">
+    <tr align="center">
+        <td style="color:#666666; bgcolor=#eeeeee; align=center; font-family:Arial, sans-serif; font-size:16px; line-height:16px; text-align:center; border-top: 1px solid #c7c3c3; padding: 0.9075rem 0; padding-bottom:40px; padding-top:10px;"></td>
+        <td style="color:#666666; bgcolor=#eeeeee; align=center; font-family:Arial, sans-serif; font-size:14px; line-height:14px; text-align:center;">Created by <a href="https://www.getpanached.co/" style="text-decoration:underline;">Becca Mayers</a></td>
+    </tr>
+</table>
+</body>
+</html>
+
+                
+
