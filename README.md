@@ -1,5 +1,5 @@
 # report-bot
-Beautiful summary report on autopilot.
+Summary reporting on autopilot.
 
 This report bot generates and calculates randomized monthly [care management](https://www.ahrq.gov/ncepcr/care/coordination/mgmt.html) metrics for July 2019 to present along a fictitious facility set named after the [military alphabet](https://en.wikipedia.org/wiki/NATO_phonetic_alphabet). Metrics from any industry are fodder for a report bot.
 
